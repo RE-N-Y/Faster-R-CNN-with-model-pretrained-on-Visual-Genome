@@ -504,11 +504,17 @@ def generate_tsv(outfile, image_ids, args):
                 if int(image_id) in missing:
                     _t["misc"].tic()
                     # print (type(get_detections_from_im(fasterRCNN, classes, im_file, image_id, args)))
-                    writer.writerow(
-                        get_detections_from_im(
-                            fasterRCNN, classes, im_file, image_id, args
-                        )
-                    )
+                    try:
+                       writer.writerow(
+                           get_detections_from_im(
+                               fasterRCNN, classes, im_file, image_id, args
+                           )
+                       )
+                    except:
+                       writer.writerow({
+                          "image_id": image_id, "image_h": -1, "image_w": -1,
+                          "box_labels": [], "num_boxes": -1, "boxes": "", "features": ""
+                       })
                     _t["misc"].toc()
                     if (count % 100) == 0:
                         print(
